@@ -8,7 +8,6 @@ export default function Portofoliu() {
     fetch('https://classic-growth-0878312446.strapiapp.com/api/proiects')
       .then(res => res.json())
       .then(data => {
-        // În Strapi v5, datele sunt direct în array-ul 'data'
         setProiecte(data.data || []);
         setLoading(false);
       })
@@ -18,7 +17,7 @@ export default function Portofoliu() {
       });
   }, []);
 
-  if (loading) return <div className="text-center py-20">Se încarcă proiectele...</div>;
+  if (loading) return <div className="text-center py-20 text-foreground">Se încarcă proiectele...</div>;
 
   return (
     <div className="max-w-7xl mx-auto py-20 px-4 animate-fade-in font-sans">
@@ -41,15 +40,19 @@ export default function Portofoliu() {
               <p className="text-muted-foreground mb-8 leading-relaxed">
                 {proiect.Descriere || "Fără descriere"}
               </p>
+              
+              {/* Afișarea tehnologiilor ca bule separate */}
               <div className="flex flex-wrap gap-2">
-                <span className="bg-secondary/50 border border-secondary text-foreground text-sm font-semibold px-4 py-1.5 rounded-md">
-                  {proiect.Tehnologii || "N/A"}
-                </span>
+                {proiect.Tehnologii?.split(',').map((tech, idx) => (
+                  <span key={idx} className="bg-secondary/50 border border-secondary text-foreground text-sm font-semibold px-4 py-1.5 rounded-md">
+                    {tech.trim()}
+                  </span>
+                ))}
               </div>
             </div>
           ))
         ) : (
-          <p className="text-center col-span-2">Nu există proiecte publicate momentan.</p>
+          <p className="text-center col-span-2 text-muted-foreground">Nu există proiecte publicate momentan în Strapi.</p>
         )}
       </div>
     </div>
